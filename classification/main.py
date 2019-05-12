@@ -22,6 +22,9 @@ from keras.layers.normalization import BatchNormalization
 from keras.models import Model
 
 from sklearn.metrics import accuracy_score
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
 
 def load_dataset(path):
     data = load_files(path)
@@ -63,14 +66,14 @@ def input_branch(input_shape=None):
     branch = Activation("relu")(branch)
     return branch, branch_input
 
-train_files, train_targets = load_dataset('dogImages/train')
-valid_files, valid_targets = load_dataset('dogImages/valid')
-test_files, test_targets = load_dataset('dogImages/test')
+train_files, train_targets = load_dataset('highresdata/train')
+valid_files, valid_targets = load_dataset('highresdata/valid')
+test_files, test_targets = load_dataset('highresdata/test')
 #train_files, train_targets = load_dataset('train')
 #test_files, test_targets = load_dataset('test')
 
 #dog_names = [item[20:-1] for item in sorted(glob("dog/assets/images/train/*/"))]
-dog_names = [item[10:-1] for item in sorted(glob("dogImages/train/*/"))]
+dog_names = [item[10:-1] for item in sorted(glob("highresdata/train/*/"))]
 #dog_names = [item[10:-1] for item in sorted(glob("train/*/"))]
 #print(dog_names)
 #input()
@@ -91,6 +94,7 @@ test_tensors = paths_to_tensor(test_files).astype('float32')/255
 
 #Extracting feature
 print("Extracting feature")
+
 train_vgg19 = extract_VGG19(train_files)
 valid_vgg19 = extract_VGG19(valid_files)
 test_vgg19 = extract_VGG19(test_files)
@@ -118,10 +122,26 @@ model.summary()
 
 
 model.compile(loss='categorical_crossentropy', optimizer="rmsprop", metrics=['accuracy'])
-checkpointer = ModelCheckpoint(filepath='saved_models/bestmodel.hdf5', verbose=1, save_best_only=True)
-model.fit([train_vgg19, train_resnet50], train_targets, validation_data=([valid_vgg19, valid_resnet50], valid_targets),epochs=10, batch_size=4, callbacks=[checkpointer], verbose=1)
+#checkpointer = ModelCheckpoint(filepath='saved_models/bestmodel.hdf5', verbose=1, save_best_only=True)
+history = model.fit([train_vgg19, train_resnet50], train_targets, validation_data=([valid_vgg19, valid_resnet50], valid_targets),epochs=30, batch_size=4, verbose=1)
 
-model.load_weights('saved_models/bestmodel.hdf5')
+plt.plot(history.history['acc'])
+plt.plot(history.history['val_acc'])
+plt.title('Model accuracy')
+plt.ylabel('Accuracy')
+plt.xlabel('Epoch')
+plt.legend(['Train','Test'],loc='upper left')
+plt.savefig('Model_accuracy.png')
+
+plt.plot(history.history['loss'])
+plt.plot(history.history['val_loss'])
+plt.title('Model loss')
+plt.ylabel('Loss')
+plt.xlabel('Epoch')
+plt.legend(['Train','Test'],loc='upper left')
+plt.savefig('Model_loss.png')
+
+#model.load_weights('saved_models/bestmodel.hdf5')
 
 
 
