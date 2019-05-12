@@ -1,10 +1,10 @@
 # Super Resolution Classification
 
-This is a project aimed at using classification on superresolution image. Hi
+This is a project aimed at using classification on superresolution image.
 
 ## Super Resolution GAN Model
 
-This model aims to ...
+This model aims to generate super resolution images from low resolution images.
 
 ### Weights and images
 
