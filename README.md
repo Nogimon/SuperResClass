@@ -58,4 +58,4 @@ will run the model which prints the accuracy and return the plots of accuracy an
 ```
 python resize.py
 ```
-will store images in files in Linux system.
+will move images in files in Linux system.
