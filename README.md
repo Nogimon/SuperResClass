@@ -12,8 +12,11 @@ Pretrained weights and images are actually needed for the model. However, they a
 
 ### Run inference on images
 Environment:
+
     python 3.6
+
     tensorflow 1.10
+
 Run:
 ```
 python infer2.py
@@ -36,13 +39,23 @@ In order to see the results of classification accuracy due to the resolution of 
 
 ### Run Model
 Environment:
+
     python 3.6.1
+    
     cuda 8.0
+    
     cudnn 6.0
+    
     tensorflow r1.2
+    
     (load h5py library if needed)
+    
 Run:
 ```
-  python main.py
+python main.py
 ```
-will run the model and returns the accuracy and hisory
+will run the model which prints the accuracy and return the plots of accuracy and loss.
+```
+python resize.py
+```
+will store images in files in Linux system.
